@@ -1,0 +1,122 @@
+## Generated mta.yaml based on template version 0.4.0
+## appName = multitenantapp
+## language=java; multiTenant=false
+## approuter=
+_schema-version: '3.1'
+ID: multitenantapp
+version: 1.0.0-SNAPSHOT
+description: "multitenantapp application"
+parameters:
+   enable-parallel-deployments: true
+build-parameters:
+   before-all:
+   -  builder: custom
+      commands:
+      - npm install --production
+      - npx -p @sap/cds-dk cds build --production
+      
+      
+modules:
+# --------------------- SERVER MODULE ------------------------
+-  name: multitenantapp-srv
+# ------------------------------------------------------------
+   type: java
+   path: srv
+   properties:
+      SPRING_PROFILES_ACTIVE: cloud
+      CDS_MULTITENANCY_APPUI_TENANTSEPARATOR: "-"
+   parameters:
+      memory: 1024M
+      disk-quota: 256M
+      buildpack: sap_java_buildpack
+   build-parameters:
+      builder: custom
+      commands:
+        - mvn clean package -DskipTests=true
+      build-result: target/*-exec.jar
+   requires:
+   -  name: service-manager
+   -  name: multitenantapp-xsuaa
+   -  name: saas-registry
+   -  name: sidecar
+      properties:
+         CDS_MULTITENANCY_SIDECAR_URL: ~{url}
+   -  name: app
+      properties:
+         CDS_MULTITENANCY_APPUI_URL: ~{url}
+   provides:
+   -  name: srv
+      properties:
+         url: '${default-url}'
+                  
+# --------------------- SIDECAR MODULE -----------------------
+-  name: mtx-sidecar
+# ------------------------------------------------------------
+   type: nodejs
+   path: mtx-sidecar
+   parameters:
+      memory: 256M
+      disk-quota: 512M
+   requires:
+   -  name: multitenantapp-xsuaa
+   -  name: service-manager
+   provides:
+   -  name: sidecar
+      properties:
+         url: ${default-url}
+         
+# --------------------- APPROUTER MODULE ---------------------
+-  name: multitenantapp-app
+# ------------------------------------------------------------
+   type: nodejs
+   path: app
+   parameters:
+      memory: 256M
+      disk-quota: 512M
+   properties:
+      TENANT_HOST_PATTERN: ^(.*)-${default-uri}
+   requires:
+   -  name: srv
+      group: destinations
+      properties:
+         name: backend
+         url: ~{url}
+         forwardAuthToken: true
+         strictSSL: true
+   -  name: multitenantapp-xsuaa
+   provides:
+   -  name: app
+      properties:
+         url: '${default-url}'
+         
+
+# --------------------- RESOURCES ---------------------
+resources:
+# -----------------------------------------------------
+-  name: multitenantapp-xsuaa
+   type: com.sap.xs.uaa
+   parameters:
+      service-plan: broker
+      path: ./security.json
+      config:
+         xsappname: multitenantapp-${org}-${space}
+         
+-  name: service-manager
+   type: org.cloudfoundry.managed-service
+   parameters:
+      service: service-manager
+      service-plan: container
+
+- name: saas-registry
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: saas-registry
+    service-plan: application
+    config:
+        appName: multitenantapp-${org}-${space} # this is the text on the tile
+        xsappname: multitenantapp-${org}-${space} # this is the value from xsuaa.parameters.config.xsappname
+        appUrls:
+          getDependencies: ~{srv/url}/mt/v1.0/subscriptions/dependencies
+          onSubscription: ~{srv/url}/mt/v1.0/subscriptions/tenants/{tenantId}
+  requires:
+    - name: srv
