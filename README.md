@@ -382,43 +382,6 @@ Create a new SubAccount to onboard a new tenant as shown below.
 
 ![Book Object Page](assets/readmeImages/SubAccountCreation.jpg)
 
-Subscribe to the Multi Tenant App as below.
-
-![Book Object Page](assets/readmeImages/SubscribeApp.jpg)
-
-![Book Object Page](assets/readmeImages/SubscribeAppSuccess.jpg)
-
-Go to application and you will see route does not exists error as below.
-
-![Book Object Page](assets/readmeImages/GoToApp.jpg)
-
-![Book Object Page](assets/readmeImages/GoToAppError.jpg)
-
-Add tenant url as a new application route and map tenant URL to AppRouter URL as shown below.
-
-![Book Object Page](assets/readmeImages/AddRoute.jpg)
-
-![Book Object Page](assets/readmeImages/MapRoute.jpg)
-
-Access the application using the newly created tenant URL and this should display a welcome page as below. Click on Get My Tenant Data link and should authenticate the user against SAP Default IDP (enabled by default) and should show all Book entries from the tenant DB as below.
-
-![Book Object Page](assets/readmeImages/Welcome.jpg)
-
-![Book Object Page](assets/readmeImages/BookListing.jpg)
-
-Add a new book entry to tenant DB and check the same using Get My Tenant Data link as shown below.
-
-First we need to request for CSRF token.
-
-![Book Object Page](assets/readmeImages/PostmanGet.jpg)
-
-Post a book entry.
-
-![Book Object Page](assets/readmeImages/PostmanPost.jpg)
-
-Refresh the page and check if data is retrieved.
-
-![Book Object Page](assets/readmeImages/BookListingWithData.jpg)
 		 
 ## Links and Further Reading:
 
@@ -430,6 +393,3 @@ Refresh the page and check if data is retrieved.
 
 - CAP Samples for Java
 `https://github.com/SAP-samples/cloud-cap-samples-java`
-
-- SAP HANA Academy >> SAP BTP Multitenant Business Applications
-`https://www.youtube.com/playlist?list=PLkzo92owKnVx3Sh0nemX8GoSNzJGfsWJM`
