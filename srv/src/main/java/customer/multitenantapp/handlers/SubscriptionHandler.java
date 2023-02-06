@@ -26,7 +26,7 @@ public class SubscriptionHandler implements EventHandler {
       logger.info("reading other values {}",context.getSubscriptionPayload());
 //        context.setInstanceCreationOptions(
 //        new InstanceCreationOptions().withProvisioningParameters(
-//            Collections.singletonMap("database_id", "9aad6394-1d9f-46d5-9113-ff90702530f9")));
+//            Collections.singletonMap("database_id", "<database_Id>")));
     }
 
 }
