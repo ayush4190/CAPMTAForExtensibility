@@ -349,13 +349,6 @@ Please follow below screenshots to create an instance and in step 3, please sele
 
 Create HANA Cloud Instance: 
 
-Screenshot 1:
-
-![Book Object Page](assets/readmeImages/CreateHANACloudInstance.jpg)
-
-Screenshot 2:
-
-![Book Object Page](assets/readmeImages/CreateHANACloudInstanceAllowAllIPAddresses.jpg)
 
 `Note: once the HANA Cloud instance is created, please copy the instance id and replace the value in SubscriptionHandler.java as follows.`
 
@@ -374,13 +367,9 @@ public void beforeSubscription(MtSubscribeEventContext context) {
 
 ## Sample Demo:
 
-Once the deployment is successful, you should see all the 4 apps in started status as below.
+- Once the deployment is successful, you should see all the 4 apps in started status.
 
-![Book Object Page](assets/readmeImages/AppsRunning.jpg)
-
-Create a new SubAccount to onboard a new tenant as shown below.
-
-![Book Object Page](assets/readmeImages/SubAccountCreation.jpg)
+- Create a new SubAccount to onboard a new tenant.
 
 		 
 ## Links and Further Reading:
